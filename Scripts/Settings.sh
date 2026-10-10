@@ -83,4 +83,9 @@ if [ -f "$WIFI_UC" ]; then
 																																																						echo "Warning: config-default not found for $WRT_TARGET/$WRT_SUBTARGET"
 																																																							fi
 																																																							fi
+
+																																																							# ========== 锁定目标设备 ==========
+																																																							echo "CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_link_nn6000-v2=y" >> ./.config
+																																																							echo "CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_8devices_mango-dvk=n" >> ./.config
+																																																							echo "Device locked to link_nn6000-v2"
 																																																							
