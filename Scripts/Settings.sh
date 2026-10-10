@@ -43,7 +43,7 @@ if [ -f "$WIFI_UC" ]; then
 											fi
 											fi
 
-											# ========== eBPF 内核配置 ==========
+											# ========== eBPF 内核配置（直接写入 .config，不修改 config-default） ==========
 											echo "CONFIG_DEVEL=y" >> ./.config
 											echo "CONFIG_KERNEL_DEBUG_INFO=y" >> ./.config
 											echo "CONFIG_KERNEL_DEBUG_INFO_REDUCED=n" >> ./.config
@@ -54,38 +54,5 @@ if [ -f "$WIFI_UC" ]; then
 											echo "CONFIG_BPF_TOOLCHAIN_HOST=y" >> ./.config
 											echo "CONFIG_KERNEL_XDP_SOCKETS=y" >> ./.config
 											echo "CONFIG_PACKAGE_kmod-xdp-sockets-diag=y" >> ./.config
-
-											TARGET_DIR="./target/linux/$WRT_TARGET"
-											if [ -d "$TARGET_DIR" ]; then
-												CONFIG_DEFAULT=$(find $TARGET_DIR -name "config-default" -path "*/$WRT_SUBTARGET/*" 2>/dev/null | head -n 1)
-													if [ -z "$CONFIG_DEFAULT" ]; then
-															CONFIG_DEFAULT=$(find $TARGET_DIR -maxdepth 2 -name "config-default" 2>/dev/null | head -n 1)
-																fi
-																	if [ -n "$CONFIG_DEFAULT" ] && [ -f "$CONFIG_DEFAULT" ]; then
-																			echo "CONFIG_BPF=y" >> $CONFIG_DEFAULT
-																					echo "CONFIG_BPF_SYSCALL=y" >> $CONFIG_DEFAULT
-																							echo "CONFIG_BPF_JIT=y" >> $CONFIG_DEFAULT
-																									echo "CONFIG_CGROUPS=y" >> $CONFIG_DEFAULT
-																											echo "CONFIG_KPROBES=y" >> $CONFIG_DEFAULT
-																													echo "CONFIG_NET_INGRESS=y" >> $CONFIG_DEFAULT
-																															echo "CONFIG_NET_EGRESS=y" >> $CONFIG_DEFAULT
-																																	echo "CONFIG_NET_SCH_INGRESS=m" >> $CONFIG_DEFAULT
-																																			echo "CONFIG_NET_CLS_BPF=m" >> $CONFIG_DEFAULT
-																																					echo "CONFIG_NET_CLS_ACT=y" >> $CONFIG_DEFAULT
-																																							echo "CONFIG_BPF_STREAM_PARSER=y" >> $CONFIG_DEFAULT
-																																									echo "CONFIG_DEBUG_INFO=y" >> $CONFIG_DEFAULT
-																																											echo "# CONFIG_DEBUG_INFO_REDUCED is not set" >> $CONFIG_DEFAULT
-																																													echo "CONFIG_DEBUG_INFO_BTF=y" >> $CONFIG_DEFAULT
-																																															echo "CONFIG_KPROBE_EVENTS=y" >> $CONFIG_DEFAULT
-																																																	echo "CONFIG_BPF_EVENTS=y" >> $CONFIG_DEFAULT
-																																																			echo "eBPF kernel config applied to $CONFIG_DEFAULT"
-																																																				else
-																																																						echo "Warning: config-default not found for $WRT_TARGET/$WRT_SUBTARGET"
-																																																							fi
-																																																							fi
-
-																																																							# ========== 锁定目标设备 ==========
-																																																							echo "CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_link_nn6000-v2=y" >> ./.config
-																																																							echo "CONFIG_TARGET_DEVICE_qualcommax_ipq60xx_DEVICE_8devices_mango-dvk=n" >> ./.config
-																																																							echo "Device locked to link_nn6000-v2"
-																																																							
+											echo "eBPF config applied to .config"
+											
